@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, status, Request, Query
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey, func, case
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
@@ -11,6 +12,23 @@ import os
 
 # import Fast api
 app = FastAPI()
+
+FRONTEND_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "frontend"
+)
+
+app.mount(
+    "/static",
+    StaticFiles(directory=FRONTEND_DIR),
+    name="static"
+)
+
+@app.get("/", include_in_schema=False)
+def serve_frontend():
+    return FileResponse(
+        os.path.join(FRONTEND_DIR, "index.html")
+    )
 
 # Database setup
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./taskflow.db")
