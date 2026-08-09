@@ -172,14 +172,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Basic health-check endpoints
-@app.get("/")
-def root():
-    return {
-        "status": "success",
-        "message": "TaskFlow API is running successfully 🚀"
-    }
-
 @app.get("/home")
 def home():
     return {"message": "Server is working!"}
