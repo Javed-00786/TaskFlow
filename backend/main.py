@@ -9,6 +9,9 @@ from typing import List, Optional, Dict, Any
 import time
 import os
 
+# import Fast api
+app = FastAPI()
+
 # Database setup
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./taskflow.db")
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
