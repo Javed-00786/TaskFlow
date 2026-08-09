@@ -1,3 +1,7 @@
-.env
+__pycache__/
+*.pyc
 *.db
-backend/__pycache__/main.cpython-314.pyc
+.env
+.env.*
+venv/
+.venv/
