@@ -11,7 +11,7 @@ import time
 import os
 
 # import Fast api
-app = FastAPI()
+app = FastAPI(title="TaskFlow API", version="1.0.0")
 
 FRONTEND_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
@@ -145,9 +145,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-# FastAPI app
-app = FastAPI(title="TaskFlow API", version="1.0.0")
 
 # Middleware for logging
 @app.middleware("http")
