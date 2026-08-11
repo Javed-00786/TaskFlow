@@ -236,8 +236,9 @@ button:active {
 }
 
 /* Empty Task List */
-.task-list-container:empty {
-    display: none;
+.task-list-container h2 {
+    color: #4c51bf;
+    margin-bottom: 20px;
 }
 
 /* Mobile */
