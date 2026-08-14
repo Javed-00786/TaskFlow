@@ -1,47 +1,870 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskFlow - Task Management Dashboard</title>
+
+    <title>TaskFlow - Professional Task Management</title>
+
     <link rel="stylesheet" href="/static/styles.css">
 </head>
+
 <body>
-    <div class="container">
-        <h1>TaskFlow Dashboard</h1>
-        
-        <!-- Add Task Form -->
-        <div class="add-task-form">
-            <h2>Add New Task</h2>
-            <form id="taskForm">
-                <div class="form-group">
-                    <label for="title">Task Title</label>
-                    <input type="text" id="title" name="title" required>
-                    <div class="error-message" id="titleError"></div>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description (optional)</label>
-                    <textarea id="description" name="description" rows="2"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="priority">Priority</label>
-                    <select id="priority" name="priority" required>
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                    </select>
-                </div>
-                <button type="submit">Add Task</button>
-            </form>
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header class="navbar">
+
+        <div class="navbar-inner">
+
+            <div class="brand">
+                <span class="brand-icon">☷</span>
+
+                <span class="brand-name">
+                    TaskFlow
+                </span>
+            </div>
+
+            <nav class="nav-links">
+
+                <a href="#dashboard">Dashboard</a>
+                <a href="#tasks">Tasks</a>
+                <a href="#projects">Projects</a>
+                <a href="#statistics">Statistics</a>
+                <a href="#about">About</a>
+
+            </nav>
+
+            <div class="welcome">
+
+                Welcome, <strong>Mohd Javed</strong>
+
+                <span>
+                    • Task Management System
+                </span>
+
+            </div>
+
         </div>
-        
-        <div class="task-list-container">
-    <h2>Your Tasks</h2>
-    <ul id="taskList" class="task-list"></ul>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main-container" id="dashboard">
+
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <section class="hero-section">
+
+            <div>
+
+                <h1>
+                    Manage Your Daily Tasks Easily
+                </h1>
+
+                <p>
+                    FastAPI + PostgreSQL + AI Powered Task Manager
+                </p>
+
+            </div>
+
+            <button
+                class="primary-btn"
+                type="button"
+                onclick="document.getElementById('title').focus()">
+
+                + Create New Task
+
+            </button>
+
+        </section>
+
+
+        <!-- =================================================
+             DASHBOARD STATISTICS
+        ================================================== -->
+
+        <section class="stats-grid">
+
+
+            <!-- TOTAL TASKS -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📋
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalTaskCount">
+
+                    0
+
+                </div>
+
+                <div class="stat-label">
+                    Total Tasks
+                </div>
+
+            </div>
+
+
+            <!-- HIGH PRIORITY -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🔴
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="highTaskCount">
+
+                    0
+
+                </div>
+
+                <div class="stat-label">
+                    High Priority
+                </div>
+
+            </div>
+
+
+            <!-- MEDIUM PRIORITY -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🟡
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="mediumTaskCount">
+
+                    0
+
+                </div>
+
+                <div class="stat-label">
+                    Medium Priority
+                </div>
+
+            </div>
+
+
+            <!-- LOW PRIORITY -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🟢
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="lowTaskCount">
+
+                    0
+
+                </div>
+
+                <div class="stat-label">
+                    Low Priority
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             AI QUICK ADD
+        ================================================== -->
+
+        <section class="quick-add-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    🤖 AI Quick Add
+                </h2>
+
+                <p>
+                    Describe your task in plain English
+                </p>
+
+            </div>
+
+
+            <div class="quick-add-box">
+
+                <input
+                    type="text"
+                    id="quickAddInput"
+                    placeholder="Example: Finish backend tomorrow high priority"
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    id="quickAddBtn">
+
+                    ✨ Quick Add
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="quickAddMessage"
+                class="quick-add-message">
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SEARCH TASKS
+        ================================================== -->
+
+        <section class="search-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    🔎 Search Tasks
+                </h2>
+
+            </div>
+
+            <input
+                type="text"
+                id="searchInput"
+                class="search-input"
+                placeholder="Search by title..."
+                autocomplete="off"
+            >
+
+        </section>
+
+
+        <!-- =================================================
+             CREATE TASK
+        ================================================== -->
+
+        <section class="create-task-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    ➕ Create Task
+                </h2>
+
+            </div>
+
+
+            <form id="taskForm">
+
+                <div class="task-form-grid">
+
+
+                    <!-- TITLE -->
+
+                    <div class="form-group">
+
+                        <label for="title">
+                            Task Title
+                        </label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            placeholder="Enter task title"
+                            required
+                        >
+
+                        <div
+                            class="error-message"
+                            id="titleError">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRIORITY -->
+
+                    <div class="form-group">
+
+                        <label for="priority">
+                            Priority
+                        </label>
+
+                        <select
+                            id="priority"
+                            name="priority"
+                            required>
+
+
+                            <option value="low">
+                                Low
+                            </option>
+
+                            <option
+                                value="medium"
+                                selected>
+
+                                Medium
+
+                            </option>
+
+                            <option value="high">
+                                High
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- DUE DATE -->
+
+                    <div class="form-group">
+
+                        <label for="due_date">
+                            Due Date
+                        </label>
+
+                        <input
+                            type="text"
+                            id="due_date"
+                            name="due_date"
+                            placeholder="e.g. tomorrow"
+                        >
+
+                    </div>
+
+
+                    <!-- PROJECT ID -->
+
+                    <div class="form-group">
+
+    <label for="project_id">
+        Project
+    </label>
+
+    <select
+        id="project_id"
+        name="project_id"
+        required>
+
+        <option value="">
+            Loading projects...
+        </option>
+
+    </select>
+
 </div>
-    </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group description-group">
+
+                    <label for="description">
+
+                        Description
+
+                        <span>
+                            (optional)
+                        </span>
+
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="3"
+                        placeholder="Add task description..."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- ADD TASK BUTTON -->
+
+                <button
+                    type="submit"
+                    class="add-task-btn">
+
+                    + Add Task
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- =================================================
+             TASK LIST
+        ================================================== -->
+
+        <section
+            class="task-list-section"
+            id="tasks">
+
+            <div class="section-title-row">
+
+                <h2>
+                    📋 Task List
+                </h2>
+
+                <span
+                    class="task-count"
+                    id="taskCount">
+
+                    0 Tasks
+
+                </span>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table class="task-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Title</th>
+
+                            <th>Priority</th>
+
+                            <th>Due Date</th>
+
+                            <th>Project</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="taskList">
+
+                        <!-- JavaScript will add tasks here -->
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             TASK STATISTICS
+        ================================================== -->
+
+        <section
+            class="statistics-section"
+            id="statistics">
+
+            <div class="section-heading">
+
+                <h2>
+                    📊 Task Statistics
+                </h2>
+
+            </div>
+
+
+            <div class="statistics-grid">
+
+
+                <!-- COMPLETED -->
+
+                <div class="statistics-card">
+
+                    <h3>
+                        Completed
+                    </h3>
+
+                    <p>
+                        Tasks Finished
+                    </p>
+
+                    <strong id="completedCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <!-- PENDING -->
+
+                <div class="statistics-card">
+
+                    <h3>
+                        Pending
+                    </h3>
+
+                    <p>
+                        Remaining Tasks
+                    </p>
+
+                    <strong id="pendingCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <!-- PROJECTS -->
+
+                <div class="statistics-card">
+
+                    <h3>
+                        Projects
+                    </h3>
+
+                    <p>
+                        Active Projects
+                    </p>
+
+                    <strong id="projectCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             RECENT ACTIVITY
+        ================================================== -->
+
+        <section class="activity-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    🕒 Recent Activity
+                </h2>
+
+            </div>
+
+
+            <div class="activity-list">
+
+
+                <div class="activity-item">
+
+                    <span>✓</span>
+
+                    Backend Connected Successfully
+
+                </div>
+
+
+                <div class="activity-item">
+
+                    <span>●</span>
+
+                    PostgreSQL / Database Connected
+
+                </div>
+
+
+                <div class="activity-item">
+
+                    <span>☁</span>
+
+                    Render Deployment Active
+
+                </div>
+
+
+                <div class="activity-item">
+
+                    <span>🤖</span>
+
+                    AI Quick Add Enabled
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PROJECT OVERVIEW
+        ================================================== -->
+
+        <section
+            class="project-section"
+            id="projects">
+
+            <div class="section-heading">
+
+                <h2>
+                    📁 Project Overview
+                </h2>
+
+            </div>
+
+
+            <div class="technology-grid">
+
+
+                <div class="technology-card">
+
+                    <strong>
+                        ⚡ FastAPI
+                    </strong>
+
+                    <span>
+                        Backend API Framework
+                    </span>
+
+                </div>
+
+
+                <div class="technology-card">
+
+                    <strong>
+                        🐘 PostgreSQL
+                    </strong>
+
+                    <span>
+                        Production Database
+                    </span>
+
+                </div>
+
+
+                <div class="technology-card">
+
+                    <strong>
+                        🗃️ SQLAlchemy
+                    </strong>
+
+                    <span>
+                        ORM & Database Management
+                    </span>
+
+                </div>
+
+
+                <div class="technology-card">
+
+                    <strong>
+                        ☁️ Render
+                    </strong>
+
+                    <span>
+                        Cloud Deployment
+                    </span>
+
+                </div>
+
+
+                <div class="technology-card">
+
+                    <strong>
+                        🌐 JavaScript
+                    </strong>
+
+                    <span>
+                        Interactive Frontend
+                    </span>
+
+                </div>
+
+
+                <div class="technology-card">
+
+                    <strong>
+                        🤖 AI Parser
+                    </strong>
+
+                    <span>
+                        Natural Language Quick Add
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ABOUT
+        ================================================== -->
+
+        <section
+            class="activity-section"
+            id="about">
+
+            <div class="section-heading">
+
+                <h2>
+                    ℹ️ About TaskFlow
+                </h2>
+
+            </div>
+
+
+            <div class="activity-list">
+
+                <p>
+                    TaskFlow is a professional task management
+                    platform built with FastAPI, SQLAlchemy,
+                    JavaScript and AI-powered Quick Add.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="footer">
+
+        <div class="footer-content">
+
+
+            <div class="footer-brand">
+
+                <h2>
+                    ☷ TaskFlow
+                </h2>
+
+                <p>
+                    Professional Task Management System
+                    powered by FastAPI, SQLAlchemy and AI.
+                </p>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>
+                    Quick Links
+                </h3>
+
+                <a href="#dashboard">
+                    Dashboard
+                </a>
+
+                <a href="#tasks">
+                    Tasks
+                </a>
+
+                <a href="#projects">
+                    Projects
+                </a>
+
+                <a href="#statistics">
+                    Statistics
+                </a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>
+                    Technology
+                </h3>
+
+                <span>
+                    FastAPI
+                </span>
+
+                <span>
+                    SQLAlchemy
+                </span>
+
+                <span>
+                    PostgreSQL
+                </span>
+
+                <span>
+                    JavaScript
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            © 2026 TaskFlow.
+            Professional Task Management System.
+
+        </div>
+
+    </footer>
+
+
+    <!-- =====================================================
+         BACK TO TOP
+    ====================================================== -->
+
+    <button
+        class="back-to-top"
+        type="button"
+        onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+        aria-label="Back to top">
+
+        ↑
+
+    </button>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
 
     <script src="/static/script.js"></script>
 
 </body>
+
 </html>
