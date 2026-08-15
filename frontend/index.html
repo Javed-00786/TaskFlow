@@ -2,15 +2,28 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>TaskFlow - Professional Task Management</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="/static/styles.css">
+    <title>
+        TaskFlow - Professional Task Management
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/static/styles.css"
+    >
+
 </head>
 
+
 <body>
+
 
     <!-- =====================================================
          NAVBAR
@@ -21,26 +34,47 @@
         <div class="navbar-inner">
 
             <div class="brand">
-                <span class="brand-icon">☷</span>
+
+                <span class="brand-icon">
+                    ☷
+                </span>
 
                 <span class="brand-name">
                     TaskFlow
                 </span>
+
             </div>
+
 
             <nav class="nav-links">
 
-                <a href="#dashboard">Dashboard</a>
-                <a href="#tasks">Tasks</a>
-                <a href="#projects">Projects</a>
-                <a href="#statistics">Statistics</a>
-                <a href="#about">About</a>
+                <a href="#dashboard">
+                    Dashboard
+                </a>
+
+                <a href="#tasks">
+                    Tasks
+                </a>
+
+                <a href="#projects">
+                    Projects
+                </a>
+
+                <a href="#statistics">
+                    Statistics
+                </a>
+
+                <a href="#about">
+                    About
+                </a>
 
             </nav>
 
+
             <div class="welcome">
 
-                Welcome, <strong>Mohd Javed</strong>
+                Welcome,
+                <strong>Mohd Javed</strong>
 
                 <span>
                     • Task Management System
@@ -53,11 +87,15 @@
     </header>
 
 
+
     <!-- =====================================================
          MAIN
     ====================================================== -->
 
-    <main class="main-container" id="dashboard">
+    <main
+        class="main-container"
+        id="dashboard"
+    >
 
 
         <!-- =================================================
@@ -78,16 +116,19 @@
 
             </div>
 
+
             <button
                 class="primary-btn"
                 type="button"
-                onclick="document.getElementById('title').focus()">
+                onclick="document.getElementById('title').focus()"
+            >
 
                 + Create New Task
 
             </button>
 
         </section>
+
 
 
         <!-- =================================================
@@ -97,7 +138,7 @@
         <section class="stats-grid">
 
 
-            <!-- TOTAL TASKS -->
+            <!-- TOTAL -->
 
             <div class="stat-card">
 
@@ -107,10 +148,9 @@
 
                 <div
                     class="stat-number"
-                    id="totalTaskCount">
-
+                    id="totalTaskCount"
+                >
                     0
-
                 </div>
 
                 <div class="stat-label">
@@ -120,7 +160,8 @@
             </div>
 
 
-            <!-- HIGH PRIORITY -->
+
+            <!-- HIGH -->
 
             <div class="stat-card">
 
@@ -130,10 +171,9 @@
 
                 <div
                     class="stat-number"
-                    id="highTaskCount">
-
+                    id="highTaskCount"
+                >
                     0
-
                 </div>
 
                 <div class="stat-label">
@@ -143,7 +183,8 @@
             </div>
 
 
-            <!-- MEDIUM PRIORITY -->
+
+            <!-- MEDIUM -->
 
             <div class="stat-card">
 
@@ -153,10 +194,9 @@
 
                 <div
                     class="stat-number"
-                    id="mediumTaskCount">
-
+                    id="mediumTaskCount"
+                >
                     0
-
                 </div>
 
                 <div class="stat-label">
@@ -166,7 +206,8 @@
             </div>
 
 
-            <!-- LOW PRIORITY -->
+
+            <!-- LOW -->
 
             <div class="stat-card">
 
@@ -176,10 +217,9 @@
 
                 <div
                     class="stat-number"
-                    id="lowTaskCount">
-
+                    id="lowTaskCount"
+                >
                     0
-
                 </div>
 
                 <div class="stat-label">
@@ -189,6 +229,7 @@
             </div>
 
         </section>
+
 
 
         <!-- =================================================
@@ -219,9 +260,11 @@
                     autocomplete="off"
                 >
 
+
                 <button
                     type="button"
-                    id="quickAddBtn">
+                    id="quickAddBtn"
+                >
 
                     ✨ Quick Add
 
@@ -232,11 +275,12 @@
 
             <div
                 id="quickAddMessage"
-                class="quick-add-message">
-
+                class="quick-add-message"
+            >
             </div>
 
         </section>
+
 
 
         <!-- =================================================
@@ -253,6 +297,7 @@
 
             </div>
 
+
             <input
                 type="text"
                 id="searchInput"
@@ -262,6 +307,7 @@
             >
 
         </section>
+
 
 
         <!-- =================================================
@@ -281,10 +327,13 @@
 
             <form id="taskForm">
 
+
                 <div class="task-form-grid">
 
 
-                    <!-- TITLE -->
+                    <!-- =================================================
+                         TASK TITLE
+                    ================================================== -->
 
                     <div class="form-group">
 
@@ -292,24 +341,30 @@
                             Task Title
                         </label>
 
+
                         <input
                             type="text"
                             id="title"
                             name="title"
                             placeholder="Enter task title"
                             required
+                            autocomplete="off"
                         >
+
 
                         <div
                             class="error-message"
-                            id="titleError">
-
+                            id="titleError"
+                        >
                         </div>
 
                     </div>
 
 
-                    <!-- PRIORITY -->
+
+                    <!-- =================================================
+                         PRIORITY
+                    ================================================== -->
 
                     <div class="form-group">
 
@@ -317,11 +372,12 @@
                             Priority
                         </label>
 
+
                         <select
                             id="priority"
                             name="priority"
-                            required>
-
+                            required
+                        >
 
                             <option value="low">
                                 Low
@@ -329,10 +385,9 @@
 
                             <option
                                 value="medium"
-                                selected>
-
+                                selected
+                            >
                                 Medium
-
                             </option>
 
                             <option value="high">
@@ -344,7 +399,10 @@
                     </div>
 
 
-                    <!-- DUE DATE -->
+
+                    <!-- =================================================
+                         DUE DATE
+                    ================================================== -->
 
                     <div class="form-group">
 
@@ -352,41 +410,67 @@
                             Due Date
                         </label>
 
+
                         <input
                             type="text"
                             id="due_date"
                             name="due_date"
                             placeholder="e.g. tomorrow"
+                            autocomplete="off"
                         >
+
+
+                        <small>
+                            You can enter:
+                            today, tomorrow,
+                            25 Aug 2026, etc.
+                        </small>
 
                     </div>
 
 
-                    <!-- PROJECT ID -->
+
+                    <!-- =================================================
+                         PROJECT DROPDOWN
+                    ================================================== -->
 
                     <div class="form-group">
 
-    <label for="project_id">
-        Project
-    </label>
-
-    <select
-        id="project_id"
-        name="project_id"
-        required>
-
-        <option value="">
-            Loading projects...
-        </option>
-
-    </select>
-
-</div>
+                        <label for="project_id">
+                            Project
+                        </label>
 
 
-                <!-- DESCRIPTION -->
+                        <select
+                            id="project_id"
+                            name="project_id"
+                            required
+                        >
 
-                <div class="form-group description-group">
+                            <option value="">
+                                Loading projects...
+                            </option>
+
+                        </select>
+
+
+                        <small id="projectMessage">
+                            Loading available projects...
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DESCRIPTION
+                ================================================== -->
+
+                <div
+                    class="form-group description-group"
+                >
 
                     <label for="description">
 
@@ -398,6 +482,7 @@
 
                     </label>
 
+
                     <textarea
                         id="description"
                         name="description"
@@ -408,19 +493,26 @@
                 </div>
 
 
-                <!-- ADD TASK BUTTON -->
+
+                <!-- =================================================
+                     ADD TASK BUTTON
+                ================================================== -->
 
                 <button
                     type="submit"
-                    class="add-task-btn">
+                    class="add-task-btn"
+                    id="addTaskBtn"
+                >
 
                     + Add Task
 
                 </button>
 
+
             </form>
 
         </section>
+
 
 
         <!-- =================================================
@@ -429,7 +521,9 @@
 
         <section
             class="task-list-section"
-            id="tasks">
+            id="tasks"
+        >
+
 
             <div class="section-title-row">
 
@@ -437,36 +531,50 @@
                     📋 Task List
                 </h2>
 
+
                 <span
                     class="task-count"
-                    id="taskCount">
-
+                    id="taskCount"
+                >
                     0 Tasks
-
                 </span>
 
             </div>
+
 
 
             <div class="table-wrapper">
 
                 <table class="task-table">
 
+
                     <thead>
 
                         <tr>
 
-                            <th>ID</th>
+                            <th>
+                                ID
+                            </th>
 
-                            <th>Title</th>
+                            <th>
+                                Title
+                            </th>
 
-                            <th>Priority</th>
+                            <th>
+                                Priority
+                            </th>
 
-                            <th>Due Date</th>
+                            <th>
+                                Due Date
+                            </th>
 
-                            <th>Project</th>
+                            <th>
+                                Project
+                            </th>
 
-                            <th>Action</th>
+                            <th>
+                                Action
+                            </th>
 
                         </tr>
 
@@ -475,9 +583,12 @@
 
                     <tbody id="taskList">
 
-                        <!-- JavaScript will add tasks here -->
+                        <!--
+                            JavaScript will load tasks here
+                        -->
 
                     </tbody>
+
 
                 </table>
 
@@ -486,13 +597,16 @@
         </section>
 
 
+
         <!-- =================================================
              TASK STATISTICS
         ================================================== -->
 
         <section
             class="statistics-section"
-            id="statistics">
+            id="statistics"
+        >
+
 
             <div class="section-heading">
 
@@ -518,11 +632,13 @@
                         Tasks Finished
                     </p>
 
+
                     <strong id="completedCount">
                         0
                     </strong>
 
                 </div>
+
 
 
                 <!-- PENDING -->
@@ -537,11 +653,13 @@
                         Remaining Tasks
                     </p>
 
+
                     <strong id="pendingCount">
                         0
                     </strong>
 
                 </div>
+
 
 
                 <!-- PROJECTS -->
@@ -556,15 +674,18 @@
                         Active Projects
                     </p>
 
+
                     <strong id="projectCount">
                         0
                     </strong>
 
                 </div>
 
+
             </div>
 
         </section>
+
 
 
         <!-- =================================================
@@ -572,6 +693,7 @@
         ================================================== -->
 
         <section class="activity-section">
+
 
             <div class="section-heading">
 
@@ -587,7 +709,9 @@
 
                 <div class="activity-item">
 
-                    <span>✓</span>
+                    <span>
+                        ✓
+                    </span>
 
                     Backend Connected Successfully
 
@@ -596,16 +720,20 @@
 
                 <div class="activity-item">
 
-                    <span>●</span>
+                    <span>
+                        ●
+                    </span>
 
-                    PostgreSQL / Database Connected
+                    Database Connected
 
                 </div>
 
 
                 <div class="activity-item">
 
-                    <span>☁</span>
+                    <span>
+                        ☁
+                    </span>
 
                     Render Deployment Active
 
@@ -614,15 +742,19 @@
 
                 <div class="activity-item">
 
-                    <span>🤖</span>
+                    <span>
+                        🤖
+                    </span>
 
                     AI Quick Add Enabled
 
                 </div>
 
+
             </div>
 
         </section>
+
 
 
         <!-- =================================================
@@ -631,7 +763,9 @@
 
         <section
             class="project-section"
-            id="projects">
+            id="projects"
+        >
+
 
             <div class="section-heading">
 
@@ -722,9 +856,11 @@
 
                 </div>
 
+
             </div>
 
         </section>
+
 
 
         <!-- =================================================
@@ -733,7 +869,9 @@
 
         <section
             class="activity-section"
-            id="about">
+            id="about"
+        >
+
 
             <div class="section-heading">
 
@@ -747,16 +885,21 @@
             <div class="activity-list">
 
                 <p>
-                    TaskFlow is a professional task management
-                    platform built with FastAPI, SQLAlchemy,
-                    JavaScript and AI-powered Quick Add.
+
+                    TaskFlow is a professional task
+                    management platform built with
+                    FastAPI, SQLAlchemy, JavaScript
+                    and AI-powered Quick Add.
+
                 </p>
 
             </div>
 
         </section>
 
+
     </main>
+
 
 
     <!-- =====================================================
@@ -768,6 +911,8 @@
         <div class="footer-content">
 
 
+            <!-- FOOTER BRAND -->
+
             <div class="footer-brand">
 
                 <h2>
@@ -775,12 +920,17 @@
                 </h2>
 
                 <p>
+
                     Professional Task Management System
                     powered by FastAPI, SQLAlchemy and AI.
+
                 </p>
 
             </div>
 
+
+
+            <!-- QUICK LINKS -->
 
             <div class="footer-column">
 
@@ -788,17 +938,21 @@
                     Quick Links
                 </h3>
 
+
                 <a href="#dashboard">
                     Dashboard
                 </a>
+
 
                 <a href="#tasks">
                     Tasks
                 </a>
 
+
                 <a href="#projects">
                     Projects
                 </a>
+
 
                 <a href="#statistics">
                     Statistics
@@ -807,29 +961,37 @@
             </div>
 
 
+
+            <!-- TECHNOLOGY -->
+
             <div class="footer-column">
 
                 <h3>
                     Technology
                 </h3>
 
+
                 <span>
                     FastAPI
                 </span>
+
 
                 <span>
                     SQLAlchemy
                 </span>
 
+
                 <span>
                     PostgreSQL
                 </span>
+
 
                 <span>
                     JavaScript
                 </span>
 
             </div>
+
 
         </div>
 
@@ -844,6 +1006,7 @@
     </footer>
 
 
+
     <!-- =====================================================
          BACK TO TOP
     ====================================================== -->
@@ -852,11 +1015,13 @@
         class="back-to-top"
         type="button"
         onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
-        aria-label="Back to top">
+        aria-label="Back to top"
+    >
 
         ↑
 
     </button>
+
 
 
     <!-- =====================================================
@@ -864,6 +1029,7 @@
     ====================================================== -->
 
     <script src="/static/script.js"></script>
+
 
 </body>
 

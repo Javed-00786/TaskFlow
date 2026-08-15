@@ -10,15 +10,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var projectSelect = document.getElementById('project_id');
 
+    var quickAddBtn = document.getElementById('quickAddBtn');
+    var quickAddInput = document.getElementById('quickAddInput');
+    var quickAddMessage = document.getElementById('quickAddMessage');
+
+    var searchInput = document.getElementById('searchInput');
+
     var projectId = null;
+
     var allTasks = [];
 
 
+
     // =========================================================
-    // INITIALIZE APPLICATION
+    // START APPLICATION
     // =========================================================
 
     initializeApp();
+
 
 
     async function initializeApp() {
@@ -28,7 +37,9 @@ document.addEventListener('DOMContentLoaded', function () {
             await loadProjects();
 
             if (projectId) {
+
                 await fetchTasks();
+
             }
 
         } catch (error) {
@@ -43,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
     // =========================================================
     // LOAD PROJECTS
     // =========================================================
@@ -50,120 +62,68 @@ document.addEventListener('DOMContentLoaded', function () {
     async function loadProjects() {
 
         if (!projectSelect) {
+
             console.error(
                 'Project dropdown not found.'
             );
+
             return;
         }
+
 
         projectSelect.innerHTML =
             '<option value="">Loading projects...</option>';
 
-        var response = await fetch('/projects');
 
-        if (!response.ok) {
+        try {
 
-            throw new Error(
-                'Unable to load projects'
-            );
-        }
+            // -------------------------------------------------
+            // GET PROJECTS
+            // -------------------------------------------------
 
-        var projects = await response.json();
-
-        projectSelect.innerHTML = '';
+            var response =
+                await fetch('/projects');
 
 
-        // -----------------------------------------------------
-        // No projects
-        // -----------------------------------------------------
+            if (!response.ok) {
 
-        if (!projects || projects.length === 0) {
+                var projectLoadError =
+                    await response.json();
 
-            var emptyOption =
-                document.createElement('option');
-
-            emptyOption.value = '';
-
-            emptyOption.textContent =
-                'No projects available';
-
-            projectSelect.appendChild(
-                emptyOption
-            );
-
-            projectId = null;
-
-            return;
-        }
+                throw new Error(
+                    formatError(projectLoadError)
+                );
+            }
 
 
-        // -----------------------------------------------------
-        // Add projects to dropdown
-        // -----------------------------------------------------
+            var projects =
+                await response.json();
 
-        projects.forEach(function (project) {
 
-            var option =
-                document.createElement('option');
-
-            option.value = project.id;
-
-            option.textContent =
-                project.name +
-                ' (ID: ' +
-                project.id +
-                ')';
-
-            projectSelect.appendChild(
-                option
+            console.log(
+                'Projects received:',
+                projects
             );
 
-        });
 
+            // =================================================
+            // PROJECTS EXIST
+            // =================================================
 
-        // -----------------------------------------------------
-        // Select first project
-        // -----------------------------------------------------
+            if (
+                Array.isArray(projects) &&
+                projects.length > 0
+            ) {
 
-        projectId = Number(
-            projects[0].id
-        );
+                fillProjectDropdown(projects);
 
-        projectSelect.value =
-            String(projectId);
-
-
-        console.log(
-            'Projects loaded:',
-            projects
-        );
-
-        console.log(
-            'Selected Project ID:',
-            projectId
-        );
-    }
-
-
-    // =========================================================
-    // PROJECT DROPDOWN CHANGE
-    // =========================================================
-
-    if (projectSelect) {
-
-        projectSelect.addEventListener(
-            'change',
-            function () {
-
-                if (!this.value) {
-
-                    projectId = null;
-
-                    return;
-                }
 
                 projectId =
-                    Number(this.value);
+                    Number(projects[0].id);
+
+
+                projectSelect.value =
+                    String(projectId);
 
 
                 console.log(
@@ -172,32 +132,367 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
 
 
-                // Load tasks for selected project
-                fetchTasks();
+                return;
+            }
+
+
+
+            // =================================================
+            // NO PROJECTS
+            // =================================================
+
+            console.log(
+                'No projects found. Trying to create default project...'
+            );
+
+
+            await createDefaultProject();
+
+
+        } catch (error) {
+
+            console.error(
+                'Load projects error:',
+                error
+            );
+
+
+            projectSelect.innerHTML = '';
+
+
+            var errorOption =
+                document.createElement('option');
+
+
+            errorOption.value = '';
+
+
+            errorOption.textContent =
+                'Unable to load projects';
+
+
+            projectSelect.appendChild(
+                errorOption
+            );
+
+
+            projectId = null;
+
+
+            showError(error);
+        }
+    }
+
+
+
+    // =========================================================
+    // CREATE DEFAULT PROJECT
+    // =========================================================
+
+    async function createDefaultProject() {
+
+        try {
+
+            // -------------------------------------------------
+            // CREATE DEFAULT USER
+            // -------------------------------------------------
+
+            var userResponse =
+                await fetch(
+                    '/users',
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'Content-Type':
+                                'application/json'
+                        },
+
+                        body: JSON.stringify({
+
+                            email:
+                                'demo@taskflow.com',
+
+                            name:
+                                'TaskFlow User'
+                        })
+                    }
+                );
+
+
+            var user;
+
+
+            // -------------------------------------------------
+            // USER CREATED
+            // -------------------------------------------------
+
+            if (userResponse.ok) {
+
+                user =
+                    await userResponse.json();
+
+
+                console.log(
+                    'Default user created:',
+                    user
+                );
+
+            }
+
+            // -------------------------------------------------
+            // USER ALREADY EXISTS
+            // -------------------------------------------------
+
+            else {
+
+                console.log(
+                    'User already exists or POST failed. Loading users...'
+                );
+
+
+                var usersResponse =
+                    await fetch('/users');
+
+
+                if (!usersResponse.ok) {
+
+                    var usersError =
+                        await usersResponse.json();
+
+
+                    throw new Error(
+                        formatError(usersError)
+                    );
+                }
+
+
+                var users =
+                    await usersResponse.json();
+
+
+                console.log(
+                    'Users received:',
+                    users
+                );
+
+
+                if (
+                    !Array.isArray(users) ||
+                    users.length === 0
+                ) {
+
+                    throw new Error(
+                        'No users available. Please create a user first.'
+                    );
+                }
+
+
+                user =
+                    users[0];
+            }
+
+
+
+            // =================================================
+            // CREATE DEFAULT PROJECT
+            // =================================================
+
+            var projectResponse =
+                await fetch(
+                    '/projects',
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'Content-Type':
+                                'application/json'
+                        },
+
+                        body: JSON.stringify({
+
+                            name:
+                                'My TaskFlow Project',
+
+                            owner_id:
+                                user.id
+                        })
+                    }
+                );
+
+
+            if (!projectResponse.ok) {
+
+                var createProjectError =
+                    await projectResponse.json();
+
+
+                throw new Error(
+                    formatError(createProjectError)
+                );
+            }
+
+
+            var newProject =
+                await projectResponse.json();
+
+
+            console.log(
+                'Default project created:',
+                newProject
+            );
+
+
+            // -------------------------------------------------
+            // PUT NEW PROJECT IN DROPDOWN
+            // -------------------------------------------------
+
+            fillProjectDropdown([
+                newProject
+            ]);
+
+
+            projectId =
+                Number(newProject.id);
+
+
+            projectSelect.value =
+                String(projectId);
+
+
+            console.log(
+                'New Project ID:',
+                projectId
+            );
+
+        } catch (error) {
+
+            console.error(
+                'Create default project error:',
+                error
+            );
+
+
+            projectSelect.innerHTML = '';
+
+
+            var errorOption =
+                document.createElement('option');
+
+
+            errorOption.value = '';
+
+
+            errorOption.textContent =
+                'No projects available';
+
+
+            projectSelect.appendChild(
+                errorOption
+            );
+
+
+            projectId = null;
+
+
+            throw error;
+        }
+    }
+
+
+
+    // =========================================================
+    // FILL PROJECT DROPDOWN
+    // =========================================================
+
+    function fillProjectDropdown(projects) {
+
+        if (!projectSelect) {
+
+            return;
+        }
+
+
+        projectSelect.innerHTML = '';
+
+
+        projects.forEach(
+            function (project) {
+
+                var option =
+                    document.createElement('option');
+
+
+                option.value =
+                    project.id;
+
+
+                option.textContent =
+                    project.name +
+                    ' (ID: ' +
+                    project.id +
+                    ')';
+
+
+                projectSelect.appendChild(
+                    option
+                );
+
             }
         );
     }
 
 
+
+    // =========================================================
+    // PROJECT CHANGE
+    // =========================================================
+
+    if (projectSelect) {
+
+        projectSelect.addEventListener(
+            'change',
+            async function () {
+
+                if (!this.value) {
+
+                    projectId = null;
+
+                    if (taskList) {
+                        taskList.innerHTML = '';
+                    }
+
+                    updateTaskCount();
+
+                    updateDashboardStats([]);
+
+                    updateStatistics([]);
+
+                    return;
+                }
+
+
+                projectId =
+                    Number(this.value);
+
+
+                console.log(
+                    'Project changed to:',
+                    projectId
+                );
+
+
+                await fetchTasks();
+
+            }
+        );
+    }
+
+
+
     // =========================================================
     // AI QUICK ADD
     // =========================================================
-
-    var quickAddBtn =
-        document.getElementById(
-            'quickAddBtn'
-        );
-
-    var quickAddInput =
-        document.getElementById(
-            'quickAddInput'
-        );
-
-    var quickAddMessage =
-        document.getElementById(
-            'quickAddMessage'
-        );
-
 
     if (quickAddBtn) {
 
@@ -206,36 +501,48 @@ document.addEventListener('DOMContentLoaded', function () {
             async function () {
 
                 var description =
-                    quickAddInput.value.trim();
+                    quickAddInput ?
+                    quickAddInput.value.trim() :
+                    '';
 
 
-                // Empty input
                 if (!description) {
 
-                    quickAddMessage.textContent =
-                        'Please describe your task first.';
+                    if (quickAddMessage) {
+
+                        quickAddMessage.textContent =
+                            'Please describe your task first.';
+                    }
 
                     return;
                 }
 
 
-                // Project check
                 if (!projectId) {
 
-                    quickAddMessage.textContent =
-                        'Please select a project first.';
+                    if (quickAddMessage) {
+
+                        quickAddMessage.textContent =
+                            'Please select a project first.';
+                    }
 
                     return;
                 }
 
 
-                quickAddBtn.disabled = true;
+                quickAddBtn.disabled =
+                    true;
+
 
                 quickAddBtn.textContent =
                     'Creating...';
 
-                quickAddMessage.textContent =
-                    '';
+
+                if (quickAddMessage) {
+
+                    quickAddMessage.textContent =
+                        '';
+                }
 
 
                 try {
@@ -252,6 +559,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 },
 
                                 body: JSON.stringify({
+
                                     description:
                                         description,
 
@@ -277,13 +585,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     await fetchTasks();
 
 
-                    quickAddInput.value =
-                        '';
+                    if (quickAddInput) {
+
+                        quickAddInput.value =
+                            '';
+                    }
 
 
-                    quickAddMessage.textContent =
-                        '✅ Task added successfully!';
+                    if (quickAddMessage) {
 
+                        quickAddMessage.textContent =
+                            '✅ Task added successfully!';
+                    }
 
                 } catch (error) {
 
@@ -293,26 +606,29 @@ document.addEventListener('DOMContentLoaded', function () {
                     );
 
 
-                    quickAddMessage.textContent =
-                        '❌ ' +
-                        (
-                            error.message ||
-                            'Failed to create task'
-                        );
+                    if (quickAddMessage) {
 
+                        quickAddMessage.textContent =
+                            '❌ ' +
+                            (
+                                error.message ||
+                                'Failed to create task'
+                            );
+                    }
 
                 } finally {
 
                     quickAddBtn.disabled =
                         false;
 
+
                     quickAddBtn.textContent =
                         '✨ Quick Add';
                 }
-
             }
         );
     }
+
 
 
     // =========================================================
@@ -336,27 +652,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                 var titleInput =
-                    document.getElementById(
-                        'title'
-                    );
+                    document.getElementById('title');
 
 
                 var descriptionInput =
-                    document.getElementById(
-                        'description'
-                    );
+                    document.getElementById('description');
 
 
                 var priorityInput =
-                    document.getElementById(
-                        'priority'
-                    );
+                    document.getElementById('priority');
 
 
                 var dueDateInput =
-                    document.getElementById(
-                        'due_date'
-                    );
+                    document.getElementById('due_date');
 
 
                 var title =
@@ -384,7 +692,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                 // -------------------------------------------------
-                // Validate title
+                // TITLE VALIDATION
                 // -------------------------------------------------
 
                 if (!title) {
@@ -400,7 +708,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                 // -------------------------------------------------
-                // Validate project
+                // PROJECT VALIDATION
                 // -------------------------------------------------
 
                 if (!projectId) {
@@ -445,7 +753,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         'pending',
 
                                     project_id:
-                                        projectId
+                                        Number(projectId)
                                 })
                             }
                         );
@@ -463,22 +771,35 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
 
-                    // Refresh tasks
+                    console.log(
+                        'Task created:',
+                        data
+                    );
+
+
                     await fetchTasks();
 
 
-                    // Clear form
+                    // -------------------------------------------------
+                    // CLEAR FORM
+                    // -------------------------------------------------
+
                     if (titleInput) {
+
                         titleInput.value =
                             '';
                     }
 
+
                     if (descriptionInput) {
+
                         descriptionInput.value =
                             '';
                     }
 
+
                     if (dueDateInput) {
+
                         dueDateInput.value =
                             '';
                     }
@@ -497,10 +818,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         'Failed to add task'
                     );
                 }
-
             }
         );
     }
+
 
 
     // =========================================================
@@ -508,6 +829,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // =========================================================
 
     async function fetchTasks() {
+
+        if (!projectId) {
+
+            return;
+        }
+
 
         try {
 
@@ -517,8 +844,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!response.ok) {
 
+                var taskError =
+                    await response.json();
+
                 throw new Error(
-                    'Unable to load tasks'
+                    formatError(taskError)
                 );
             }
 
@@ -527,11 +857,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 await response.json();
 
 
-            allTasks = tasks;
+            if (!Array.isArray(tasks)) {
+
+                tasks = [];
+            }
+
+
+            allTasks =
+                tasks;
 
 
             // -------------------------------------------------
-            // Filter by selected project
+            // FILTER SELECTED PROJECT
             // -------------------------------------------------
 
             var projectTasks =
@@ -545,6 +882,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         );
                     }
                 );
+
+
+            console.log(
+                'Tasks for project ' +
+                projectId +
+                ':',
+                projectTasks
+            );
 
 
             renderTasks(
@@ -564,30 +909,51 @@ document.addEventListener('DOMContentLoaded', function () {
 
             updateTaskCount();
 
-
         } catch (error) {
 
             console.error(
                 'Failed to fetch tasks:',
                 error
             );
+
+
+            if (taskList) {
+
+                taskList.innerHTML =
+                    '<tr>' +
+                    '<td colspan="6">' +
+                    'Unable to load tasks' +
+                    '</td>' +
+                    '</tr>';
+            }
         }
     }
 
 
+
     // =========================================================
-    // RENDER ALL TASKS
+    // RENDER TASKS
     // =========================================================
 
     function renderTasks(tasks) {
 
         if (!taskList) {
+
             return;
         }
 
 
         taskList.innerHTML =
             '';
+
+
+        if (
+            !tasks ||
+            tasks.length === 0
+        ) {
+
+            return;
+        }
 
 
         tasks.forEach(
@@ -600,13 +966,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
     // =========================================================
-    // RENDER TASK
+    // RENDER SINGLE TASK
     // =========================================================
 
     function renderTask(task) {
 
         if (!taskList) {
+
             return;
         }
 
@@ -619,6 +987,7 @@ document.addEventListener('DOMContentLoaded', function () {
             task.id;
 
 
+
         // -----------------------------------------------------
         // ID
         // -----------------------------------------------------
@@ -626,8 +995,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var idCell =
             document.createElement('td');
 
+
         idCell.textContent =
             task.id;
+
 
 
         // -----------------------------------------------------
@@ -637,11 +1008,14 @@ document.addEventListener('DOMContentLoaded', function () {
         var titleCell =
             document.createElement('td');
 
+
         titleCell.className =
             'task-text';
 
+
         titleCell.textContent =
-            task.title;
+            task.title || '';
+
 
 
         // -----------------------------------------------------
@@ -675,6 +1049,7 @@ document.addEventListener('DOMContentLoaded', function () {
         );
 
 
+
         // -----------------------------------------------------
         // DUE DATE
         // -----------------------------------------------------
@@ -699,6 +1074,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
 
+
         // -----------------------------------------------------
         // PROJECT
         // -----------------------------------------------------
@@ -710,6 +1086,7 @@ document.addEventListener('DOMContentLoaded', function () {
         projectCell.textContent =
             task.project_id ||
             '—';
+
 
 
         // -----------------------------------------------------
@@ -728,8 +1105,9 @@ document.addEventListener('DOMContentLoaded', function () {
             'task-actions';
 
 
+
         // -----------------------------------------------------
-        // EDIT
+        // EDIT BUTTON
         // -----------------------------------------------------
 
         var editButton =
@@ -738,6 +1116,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         editButton.className =
             'edit-btn';
+
+
+        editButton.type =
+            'button';
 
 
         editButton.textContent =
@@ -751,13 +1133,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 editTask(
                     task.id
                 );
-
             }
         );
 
 
+
         // -----------------------------------------------------
-        // DELETE
+        // DELETE BUTTON
         // -----------------------------------------------------
 
         var deleteButton =
@@ -766,6 +1148,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         deleteButton.className =
             'delete-btn';
+
+
+        deleteButton.type =
+            'button';
 
 
         deleteButton.textContent =
@@ -779,7 +1165,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 deleteTask(
                     task.id
                 );
-
             }
         );
 
@@ -797,6 +1182,7 @@ document.addEventListener('DOMContentLoaded', function () {
         actionCell.appendChild(
             taskActions
         );
+
 
 
         // -----------------------------------------------------
@@ -839,15 +1225,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
     // =========================================================
     // SEARCH TASKS
     // =========================================================
-
-    var searchInput =
-        document.getElementById(
-            'searchInput'
-        );
-
 
     if (searchInput) {
 
@@ -868,14 +1249,18 @@ document.addEventListener('DOMContentLoaded', function () {
                             var sameProject =
                                 Number(
                                     task.project_id
-                                ) ===
-                                Number(
+                                ) === Number(
                                     projectId
                                 );
 
 
+                            var title =
+                                task.title ||
+                                '';
+
+
                             var matchesSearch =
-                                task.title
+                                title
                                 .toLowerCase()
                                 .includes(
                                     searchText
@@ -896,10 +1281,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                 updateTaskCount();
-
             }
         );
     }
+
 
 
     // =========================================================
@@ -936,6 +1321,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
     // =========================================================
     // DASHBOARD STATISTICS
     // =========================================================
@@ -966,9 +1352,16 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
 
-        var high = 0;
-        var medium = 0;
-        var low = 0;
+        var high =
+            0;
+
+
+        var medium =
+            0;
+
+
+        var low =
+            0;
 
 
         tasks.forEach(
@@ -995,7 +1388,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     low++;
                 }
-
             }
         );
 
@@ -1027,6 +1419,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 low;
         }
     }
+
 
 
     // =========================================================
@@ -1088,7 +1481,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         task.project_id
                     );
                 }
-
             }
         );
 
@@ -1115,11 +1507,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
     // =========================================================
     // EDIT TASK
     // =========================================================
 
     async function editTask(taskId) {
+
+        if (!taskList) {
+
+            return;
+        }
+
 
         var row =
             taskList.querySelector(
@@ -1130,6 +1529,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         if (!row) {
+
             return;
         }
 
@@ -1141,6 +1541,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         if (!titleCell) {
+
             return;
         }
 
@@ -1198,7 +1599,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             await fetchTasks();
 
-
         } catch (error) {
 
             console.error(
@@ -1213,6 +1613,7 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         }
     }
+
 
 
     // =========================================================
@@ -1257,7 +1658,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             await fetchTasks();
 
-
         } catch (error) {
 
             console.error(
@@ -1272,6 +1672,7 @@ document.addEventListener('DOMContentLoaded', function () {
             );
         }
     }
+
 
 
     // =========================================================
@@ -1324,10 +1725,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
 
-        return JSON.stringify(
-            errorData
-        );
+        try {
+
+            return JSON.stringify(
+                errorData
+            );
+
+        } catch (error) {
+
+            return 'Server error';
+        }
     }
+
 
 
     // =========================================================
@@ -1336,7 +1745,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showError(error) {
 
-        console.error(error);
+        console.error(
+            'TaskFlow Error:',
+            error
+        );
+
+
+        // Don't show alert for normal empty-project
+        // handling if the dropdown already has a message.
+
+        if (
+            projectSelect &&
+            projectId === null &&
+            projectSelect.options.length > 0
+        ) {
+
+            return;
+        }
 
 
         alert(
