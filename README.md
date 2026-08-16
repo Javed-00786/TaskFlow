@@ -4,16 +4,16 @@
 
 TaskFlow is a full-stack task management platform designed to help users organize projects, create and manage tasks, track priorities, and monitor task progress through a clean and intuitive dashboard.
 
-The platform also includes an AI-assisted **Quick Add** feature that converts natural-language task descriptions into structured tasks.
+It includes an AI-assisted **Quick Add** feature that converts natural-language task descriptions into structured tasks.
 
 ---
 
 ## 🌐 Live Demo
 
-🔗 **Live Application:**  
+**Live Application:**  
 https://taskflow-full-stack-ai-assisted-task.onrender.com
 
-🔗 **GitHub Repository:**  
+**GitHub Repository:**  
 https://github.com/Javed-00786/TaskFlow
 
 ---
@@ -30,6 +30,7 @@ https://github.com/Javed-00786/TaskFlow
 - Set task priority
 - Set due dates
 - Track task status
+- Filter tasks by project
 
 ### 📁 Project Management
 
@@ -37,7 +38,7 @@ https://github.com/Javed-00786/TaskFlow
 - View available projects
 - Assign tasks to projects
 - Select projects from a dropdown
-- Filter tasks by project
+- Filter tasks based on selected project
 
 ### 🤖 AI Quick Add
 
