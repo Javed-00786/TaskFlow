@@ -1,53 +1,42 @@
- 🚀 TaskFlow
-
-## Full-Stack AI-Assisted Task Management Platform
+🚀 TaskFlow
+Full-Stack AI-Assisted Task Management Platform
 
 TaskFlow is a full-stack task management platform designed to help users organize projects, create and manage tasks, track priorities, and monitor task progress through a clean and intuitive dashboard.
 
-The platform also includes an AI-assisted **Quick Add** feature that converts natural-language task descriptions into structured tasks.
+The platform also includes an AI-assisted Quick Add feature that converts natural-language task descriptions into structured tasks.
 
----
+🌐 Live Demo
 
-## 🌐 Live Demo
-
-**Live Application:**  
+Live Application:
 https://taskflow-full-stack-ai-assisted-task.onrender.com
 
-**GitHub Repository:**  
+GitHub Repository:
 https://github.com/Javed-00786/TaskFlow
 
----
-
-## ✨ Features
-
-### 📋 Task Management
-
-- Create tasks
-- Edit tasks
-- Delete tasks
-- Search tasks by title
-- Add task descriptions
-- Set task priority
-- Set due dates
-- Track task status
-- Assign tasks to projects
-
-### 📁 Project Management
-
-- Create projects
-- View available projects
-- Assign tasks to projects
-- Select projects from a dropdown
-- Filter tasks by project
-- Manage multiple projects
-
-### 🤖 AI Quick Add
+✨ Features
+📋 Task Management
+Create tasks
+Edit tasks
+Delete tasks
+Search tasks by title
+Add task descriptions
+Set task priority
+Set due dates
+Track task status
+Assign tasks to projects
+📁 Project Management
+Create projects
+View available projects
+Select projects from a dropdown
+Assign tasks to projects
+Filter tasks by project
+Manage multiple projects
+🤖 AI Quick Add
 
 TaskFlow provides an AI-assisted Quick Add feature that allows users to create tasks using natural-language descriptions.
 
-**Example:**
+Example:
 
-```text
 Finish backend tomorrow urgent
 
 The system can identify:
@@ -55,11 +44,11 @@ The system can identify:
 Task: Finish backend
 Priority: High
 Due Date: Tomorrow
+Project: Selected project
 📊 Dashboard
 
-The TaskFlow dashboard provides an overview of your tasks and projects.
+The TaskFlow dashboard provides an overview of tasks and projects.
 
-Dashboard Metrics
 Metric	Description
 Total Tasks	Total number of tasks
 High Priority	Number of high-priority tasks
@@ -148,6 +137,8 @@ The application will be available at:
 
 http://127.0.0.1:8000
 
+Open the URL in your browser.
+
 📚 API Documentation
 
 TaskFlow uses FastAPI's automatic API documentation.
@@ -158,10 +149,8 @@ http://127.0.0.1:8000/docs
 
 This provides an interactive Swagger UI for testing the API.
 
-Alternative documentation:
-
+Alternative Documentation
 http://127.0.0.1:8000/redoc
-
 🔌 API Endpoints
 👤 Users
 Method	Endpoint	Description
