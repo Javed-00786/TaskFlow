@@ -47,13 +47,24 @@ TaskFlow provides an AI-assisted **Quick Add** feature that converts natural-lan
 
 **Example input:**
 
+text
 Finish the report next Friday, it's urgent
-
 {
   "title": "Finish the report , it's",
   "priority": "high",
   "due_date_hint": "next friday"
 }
+
+The Quick Add parser supports keywords such as:
+
+urgent
+asap
+low priority
+whenever
+today
+tomorrow
+next week
+Days of the week
 
 📊 Dashboard
 
@@ -67,6 +78,7 @@ The TaskFlow dashboard provides an overview of task and project activity.
 | Completed       | Number of completed tasks                               |
 | Pending         | Number of pending tasks                                 |
 | Projects        | Number of projects represented in the current task view |
+
 
 🔎 Search
 
@@ -90,7 +102,6 @@ Deployment & Version Control
 Render
 Git
 GitHub
-
 🏗️ Project Structure
 TaskFlow/
 │
@@ -108,16 +119,17 @@ TaskFlow/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
-
 ⚙️ Installation & Setup
 1. Clone the Repository
-   git clone https://github.com/Javed-00786/TaskFlow.git
+git clone https://github.com/Javed-00786/TaskFlow.git
 cd TaskFlow
-
 2. Create a Virtual Environment
-   python -m venv venv
+Windows
+python -m venv venv
 venv\Scripts\activate
-
+Linux / macOS
+python3 -m venv venv
+source venv/bin/activate
 3. Install Dependencies
 pip install -r requirements.txt
 🗄️ Database
