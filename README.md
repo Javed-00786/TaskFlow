@@ -1,9 +1,10 @@
 🚀 TaskFlow
+
 Full-Stack AI-Assisted Task Management Platform
 
-TaskFlow is a full-stack task management platform designed to help users organize projects, create and manage tasks, track priorities, and monitor task progress through a clean and intuitive dashboard.
+TaskFlow is a full-stack task and project management platform designed to help users organize projects, create and manage tasks, track priorities, monitor progress, and work through a clean web dashboard.
 
-The platform also includes an AI-assisted Quick Add feature that converts natural-language task descriptions into structured tasks.
+The platform also includes an AI-assisted Quick Add feature that parses plain-English task descriptions into structured task records.
 
 🌐 Live Demo
 
@@ -14,82 +15,163 @@ GitHub Repository:
 https://github.com/Javed-00786/TaskFlow
 
 ✨ Features
+
 📋 Task Management
+
 Create tasks
+
 Edit tasks
+
 Delete tasks
+
 Search tasks by title
+
 Add task descriptions
+
 Set task priority
+
 Set due dates
+
 Track task status
+
 Assign tasks to projects
+
 📁 Project Management
+
 Create projects
+
 View available projects
+
 Select projects from a dropdown
+
 Assign tasks to projects
+
 Filter tasks by project
+
 Manage multiple projects
+
 🤖 AI Quick Add
 
-TaskFlow provides an AI-assisted Quick Add feature that allows users to create tasks using natural-language descriptions.
+TaskFlow provides an AI-assisted Quick Add feature that converts natural-language descriptions into structured task information.
 
-Example:
+Example input:
 
-Finish backend tomorrow urgent
+Finish the report next Friday, it's urgent
 
-The system can identify:
+Example result:
 
-Task: Finish backend
-Priority: High
-Due Date: Tomorrow
-Project: Selected project
+{
+  "title": "Finish the report , it's",
+  "priority": "high",
+  "due_date_hint": "next friday"
+}
+
+The Quick Add feature supports priority and date keywords such as:
+
+urgent
+
+asap
+
+low priority
+
+whenever
+
+today
+
+tomorrow
+
+next week
+
+Days of the week
+
 📊 Dashboard
 
-The TaskFlow dashboard provides an overview of your tasks and projects.
+The TaskFlow dashboard provides an overview of task and project activity.
 
-Metric	Description
-Total Tasks	Total number of tasks
-High Priority	Number of high-priority tasks
-Medium Priority	Number of medium-priority tasks
-Low Priority	Number of low-priority tasks
-Completed	Number of completed tasks
-Pending	Number of pending tasks
-Projects	Number of available projects
+Metric
+
+Description
+
+Total Tasks
+
+Total number of tasks
+
+High Priority
+
+Number of high-priority tasks
+
+Medium Priority
+
+Number of medium-priority tasks
+
+Low Priority
+
+Number of low-priority tasks
+
+Completed
+
+Number of completed tasks
+
+Pending
+
+Number of pending tasks
+
+Projects
+
+Number of projects represented in the current task view
+
 🔎 Search
 
-TaskFlow includes a task search feature that allows users to quickly find tasks by title.
+TaskFlow includes task search functionality that allows users to quickly find tasks by title.
 
 🛠️ Tech Stack
+
 Frontend
+
 HTML5
+
 CSS3
+
 JavaScript
+
 Backend
+
 Python
+
 FastAPI
+
 Pydantic
+
 SQLAlchemy
+
+Uvicorn
+
 Database
-PostgreSQL
+
 SQLite for local development
-Deployment
+
+PostgreSQL for production deployment
+
+Deployment & Version Control
+
 Render
-Version Control
+
 Git
+
 GitHub
+
 🏗️ Project Structure
 
 TaskFlow/
 │
 ├── backend/
-│ └── main.py
+│   ├── main.py
+│   └── algorithms.py
 │
 ├── frontend/
-│ ├── index.html
-│ ├── script.js
-│ └── styles.css
+│   ├── index.html
+│   ├── styles.css
+│   └── script.js
 │
 ├── benchmark.py
 ├── check_algorithms.py
@@ -97,117 +179,465 @@ TaskFlow/
 ├── .gitignore
 └── README.md
 
-⚙️ Installation
+⚙️ Installation & Setup
+
 1. Clone the Repository
 
 git clone https://github.com/Javed-00786/TaskFlow.git
-
-2. Navigate to the Project
-
 cd TaskFlow
 
-3. Create a Virtual Environment
+2. Create a Virtual Environment
 
 Windows
 
 python -m venv venv
-
-Activate the environment:
-
 venv\Scripts\activate
 
 Linux / macOS
 
 python3 -m venv venv
-
-Activate:
-
 source venv/bin/activate
 
-4. Install Dependencies
+3. Install Dependencies
 
 pip install -r requirements.txt
 
 🗄️ Database
+
 Local Development
 
-TaskFlow can use SQLite for local development.
+TaskFlow uses SQLite for local development.
 
-Default database:
+Default database URL:
 
 sqlite:///./taskflow.db
 
 Production
 
-Production deployment uses PostgreSQL through the DATABASE_URL environment variable.
+Production deployment can use PostgreSQL through the DATABASE_URL environment variable.
 
 Example:
 
 DATABASE_URL=your_postgresql_database_url
 
-Never commit database credentials or secrets to GitHub.
+Never commit database credentials, API keys, passwords, or other secrets to GitHub.
 
 ▶️ Running the Application
 
-Start the FastAPI application:
+Single-Process Run
+
+The FastAPI backend can serve the frontend as configured in the application.
+
+From the project root:
 
 uvicorn backend.main:app --reload
 
-The application will be available at:
+Open:
 
 http://127.0.0.1:8000
 
-Open the URL in your browser.
+Two-Process Development Run
+
+If running the frontend separately:
+
+Backend:
+
+cd backend
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+Frontend:
+
+cd frontend
+python -m http.server 5500
+
+Then open:
+
+http://localhost:5500
 
 📚 API Documentation
 
 TaskFlow uses FastAPI's automatic API documentation.
 
-After starting the application, open:
+After starting the backend, open:
+
+Swagger UI
 
 http://127.0.0.1:8000/docs
 
-This provides an interactive Swagger UI for testing the API.
-
-Alternative Documentation
+ReDoc
 
 http://127.0.0.1:8000/redoc
 
+Swagger UI provides an interactive interface for testing API endpoints.
+
 🔌 API Endpoints
+
 👤 Users
-Method	Endpoint	Description
-POST	/users	Create a user
-GET	/users	Get all users
+
+Method
+
+Endpoint
+
+Description
+
+POST
+
+/users
+
+Create a new user
+
+GET
+
+/users
+
+List all users
+
 📁 Projects
-Method	Endpoint	Description
-POST	/projects	Create a project
-GET	/projects	Get all projects
-GET	/projects/stats	Get project statistics
+
+Method
+
+Endpoint
+
+Description
+
+POST
+
+/projects
+
+Create a new project
+
+GET
+
+/projects
+
+List all projects
+
+GET
+
+/projects/stats
+
+Get project statistics
+
 📋 Tasks
-Method	Endpoint	Description
-POST	/tasks	Create a task
-GET	/tasks	Get all tasks
-GET	/tasks/{task_id}	Get a specific task
-PUT	/tasks/{task_id}	Update a task
-DELETE	/tasks/{task_id}	Delete a task
-POST	/tasks/quick-add	Create a task using Quick Add
+
+Method
+
+Endpoint
+
+Description
+
+POST
+
+/tasks
+
+Create a new task
+
+GET
+
+/tasks
+
+List all tasks
+
+GET
+
+/tasks/{task_id}
+
+Get a task by ID
+
+PUT
+
+/tasks/{task_id}
+
+Update a task
+
+DELETE
+
+/tasks/{task_id}
+
+Delete a task
+
+POST
+
+/tasks/quick-add
+
+Create a task using Quick Add
+
 ❤️ Health
-Method	Endpoint	Description
-GET	/health	Check API and database status
-GET	/home	Check server status
+
+Method
+
+Endpoint
+
+Description
+
+GET
+
+/health
+
+Check API/database status
+
+GET
+
+/home
+
+Check server status
+
+🔍 Algorithm Endpoints
+
+Method
+
+Endpoint
+
+Description
+
+GET
+
+/tasks/sorted?sort=priority
+
+Sort tasks by priority
+
+GET
+
+/tasks/sorted?sort=due_date
+
+Sort tasks by due date
+
+GET
+
+/tasks/search?title=exact_title&algo=binary
+
+Search using binary search
+
+GET
+
+/tasks/search?title=exact_title&algo=linear
+
+Search using linear search
+
 🤖 AI Quick Add
 
-Quick Add allows users to create tasks using natural-language descriptions.
+Quick Add creates a task from a natural-language description.
 
 Example Request
 
-{ "description": "Finish backend tomorrow urgent", "project_id": 1 }
+{
+  "description": "Finish the report next Friday, it's urgent",
+  "project_id": 1
+}
 
-Example Result
-Title: Finish backend
-Priority: High
-Due Date: Tomorrow
+Example Response
+
+Title: Finish the report , it's
+Priority: high
+Due Date: next friday
 Project ID: 1
+
+The current implementation uses a deterministic mock parser, so it does not require an external AI API or network connection.
+
+🧠 Algorithms Engine
+
+TaskFlow includes sorting and search algorithms used by dedicated API endpoints.
+
+Sorting
+
+insertion_sort
+
+Searching
+
+binary_search
+
+linear_search
+
+Time Complexity
+
+Algorithm
+
+Complexity
+
+Insertion Sort — worst case
+
+O(n²)
+
+Insertion Sort — best case
+
+O(n)
+
+Binary Search
+
+O(log n)
+
+Linear Search
+
+O(n)
+
+📈 Benchmark Results
+
+The project includes benchmark.py for measuring algorithm performance.
+
+Example benchmark results:
+
+Dataset
+
+Insertion Sort Comparisons
+
+Binary Search Existing
+
+Binary Search Missing
+
+Linear Search Existing
+
+Linear Search Missing
+
+10 tasks
+
+45
+
+4
+
+4
+
+1
+
+10
+
+500 tasks
+
+124,750
+
+9
+
+9
+
+1
+
+500
+
+3,000 tasks
+
+4,498,500
+
+12
+
+12
+
+1
+
+3,000
+
+Run the benchmark with:
+
+python benchmark.py
+
+Run algorithm correctness checks with:
+
+python check_algorithms.py
+
+🗃️ Database Schema
+
+The application uses three related tables.
+
+users
+
+Column
+
+Type
+
+Description
+
+id
+
+INTEGER
+
+Primary key
+
+email
+
+VARCHAR
+
+Unique user email
+
+name
+
+VARCHAR
+
+User name
+
+projects
+
+Column
+
+Type
+
+Description
+
+id
+
+INTEGER
+
+Primary key
+
+name
+
+VARCHAR
+
+Project name
+
+owner_id
+
+INTEGER
+
+Foreign key to users
+
+tasks
+
+Column
+
+Type
+
+Description
+
+id
+
+INTEGER
+
+Primary key
+
+title
+
+VARCHAR
+
+Task title
+
+description
+
+TEXT
+
+Task description
+
+priority
+
+VARCHAR
+
+low, medium, or high
+
+due_date
+
+VARCHAR
+
+Due date stored as text
+
+status
+
+VARCHAR
+
+pending, in_progress, or completed
+
+project_id
+
+INTEGER
+
+Foreign key to projects
+
 ☁️ Deployment
 
 TaskFlow is deployed using Render.
@@ -233,10 +663,15 @@ https://taskflow-full-stack-ai-assisted-task.onrender.com
 The project follows basic security practices:
 
 Environment variables for sensitive configuration
+
 .gitignore for local and sensitive files
+
 Server-side validation using Pydantic
+
 SQLAlchemy for database operations
+
 API error handling
+
 Input validation
 
 Production credentials and secrets should never be stored directly in source code.
@@ -246,43 +681,82 @@ Production credentials and secrets should never be stored directly in source cod
 TaskFlow demonstrates practical experience with:
 
 Full-stack web development
+
 REST API development
+
 Python
+
 FastAPI
+
 SQLAlchemy ORM
+
 PostgreSQL
+
 SQLite
+
 JavaScript
+
 HTML5
+
 CSS3
+
 CRUD operations
+
 API integration
+
 Project management
+
 Task management
+
 Natural-language task parsing
+
+Sorting and searching algorithms
+
 Git
+
 GitHub
+
 Render deployment
+
 🚧 Future Improvements
 
 Planned improvements may include:
 
 User authentication
+
 JWT authentication
+
 Role-based access control
+
 Advanced AI task parsing
+
 Task completion controls
+
 Calendar integration
+
 Notifications and reminders
+
 Advanced analytics
+
 Dark mode
+
 Automated testing
+
 CI/CD pipeline
+
 📸 Screenshots
 
-Screenshots of the TaskFlow application can be added here.
+Add screenshots of the TaskFlow dashboard and task-management interface here.
+
+Example:
+
+screenshots/
+├── dashboard.png
+├── task-management.png
+└── projects.png
 
 👨‍💻 Author
+
 Mohd Javed
 
 Full-Stack Developer | Python | FastAPI | JavaScript
@@ -301,4 +775,8 @@ This project is created for educational, portfolio, and demonstration purposes.
 
 If you find TaskFlow useful, consider giving the repository a ⭐ on GitHub.
 
-Built with ❤️ using Python, FastAPI, SQLAlchemy, PostgreSQL, JavaScript and Render.
+<div align="center">
+
+Built with ❤️ using Python, FastAPI, SQLAlchemy, JavaScript, GitHub and Render.
+
+</div>
