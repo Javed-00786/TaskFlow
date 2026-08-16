@@ -47,7 +47,7 @@ Due Date: Tomorrow
 Project: Selected project
 📊 Dashboard
 
-The TaskFlow dashboard provides an overview of tasks and projects.
+The TaskFlow dashboard provides an overview of your tasks and projects.
 
 Metric	Description
 Total Tasks	Total number of tasks
@@ -80,35 +80,54 @@ Version Control
 Git
 GitHub
 🏗️ Project Structure
+
 TaskFlow/
 │
 ├── backend/
-│   └── main.py
+│ └── main.py
 │
 ├── frontend/
-│   ├── index.html
-│   ├── script.js
-│   └── styles.css
+│ ├── index.html
+│ ├── script.js
+│ └── styles.css
 │
 ├── benchmark.py
 ├── check_algorithms.py
 ├── requirements.txt
 ├── .gitignore
 └── README.md
+
 ⚙️ Installation
 1. Clone the Repository
+
 git clone https://github.com/Javed-00786/TaskFlow.git
+
 2. Navigate to the Project
+
 cd TaskFlow
+
 3. Create a Virtual Environment
+
 Windows
+
 python -m venv venv
+
+Activate the environment:
+
 venv\Scripts\activate
+
 Linux / macOS
+
 python3 -m venv venv
+
+Activate:
+
 source venv/bin/activate
+
 4. Install Dependencies
+
 pip install -r requirements.txt
+
 🗄️ Database
 Local Development
 
@@ -117,6 +136,7 @@ TaskFlow can use SQLite for local development.
 Default database:
 
 sqlite:///./taskflow.db
+
 Production
 
 Production deployment uses PostgreSQL through the DATABASE_URL environment variable.
@@ -150,7 +170,9 @@ http://127.0.0.1:8000/docs
 This provides an interactive Swagger UI for testing the API.
 
 Alternative Documentation
+
 http://127.0.0.1:8000/redoc
+
 🔌 API Endpoints
 👤 Users
 Method	Endpoint	Description
@@ -178,10 +200,9 @@ GET	/home	Check server status
 Quick Add allows users to create tasks using natural-language descriptions.
 
 Example Request
-{
-  "description": "Finish backend tomorrow urgent",
-  "project_id": 1
-}
+
+{ "description": "Finish backend tomorrow urgent", "project_id": 1 }
+
 Example Result
 Title: Finish backend
 Priority: High
@@ -192,11 +213,17 @@ Project ID: 1
 TaskFlow is deployed using Render.
 
 Build Command
+
 pip install -r requirements.txt
+
 Start Command
+
 uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+
 Environment Variable
+
 DATABASE_URL
+
 Live Application
 
 https://taskflow-full-stack-ai-assisted-task.onrender.com
